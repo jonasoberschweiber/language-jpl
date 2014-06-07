@@ -1,0 +1,176 @@
+'scopeName': 'source.jpl'
+'name': 'JPL'
+'fileTypes': [
+  'jpl'
+]
+'patterns': [
+  {
+    'match': '\\b(if|msg|emsg|return|for|while|call|else|step|vars|global)\\b'
+    'name': 'keyword.control.jpl'
+  },
+  {
+    'begin': '^\\s*(DBMS SQL)\\b'
+    'beginCaptures':
+      '1':
+        'name': 'keyword.control.jpl'
+    'end': '(?<!\\\\)(?=\\n)'
+    'patterns': [
+      {
+        'include': 'source.sql'
+      }
+      {
+        'include': '#colon_expansion_sql'
+      }
+      {
+        'include': '#colon_expansion'
+      }
+    ]
+  }
+  {
+    'match': '\\b(DBMS ALIAS)\\b'
+    'name': 'keyword.control.jpl'
+  }
+  {
+    'begin': '^\\s*(?:(string|double)\\s+)?(proc\\b)\\s+([a-zA-Z_0-9]+)\\s*\\(',
+    'beginCaptures':
+      '1':
+        'name': 'storage.jpl'
+      '2':
+        'name': 'keyword.control.proc.jpl'
+      '3':
+        'name': 'entity.name.function.jpl'
+      '4':
+        'name': 'punctuation.definition.parameters.jpl'
+    'end': '\\)'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.parameters.jpl'
+  },
+  {
+    'begin': '"'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.string.begin.jpl'
+    'end': '"'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.string.end.jpl'
+    'name': 'string.quoted.double.interpolated.jpl',
+    'patterns': [
+      {
+        'include': '#colon_expansion'
+      }
+      {
+        'include': '#escaped_char'
+      }
+    ]
+  },
+  {
+    'match': ':[a-zA-Z0-9_]+\\b'
+    'name': 'constant.other.symbol.jpl'
+  },
+  {
+    'begin': ':\\('
+    'beginCaptures':
+      '0':
+        'name': 'constant.other.symbol.jpl'
+    'contentName': 'constant.other.symbol.jpl'
+    'end': '\\)'
+    'endCaptures':
+      '0':
+        'name': 'constant.other.symbol.jpl'
+  },
+  {
+    'match': '##|\\+|\\-|\\*|\\^'
+    'name': 'keyword.operator.arithmetic.jpl'
+  }
+  {
+    'match': '@(date|length|sum)'
+    'name': 'keyword.jpl'
+  }
+  {
+    'match': '>|>=|<|<=|==|!='
+    'name': 'keyword.operator.comparison.jpl'
+  }
+  {
+    'match': '!|&&|\\|\\||\\~|&|\\|'
+    'name': 'keyword.operator.logical.jpl'
+  }
+  {
+    'match': '\\b[A-Z_0-9]+\\b'
+    'name': 'constant.language.jpl'
+    'comment': 'common idiom constants in all caps'
+  }
+  {
+    'match': '^//.*\\n'
+    'name': 'comment.line.double-slash.jpl'
+  }
+  {
+    'begin': '(^[ \\t]+)?(?=//)'
+    'beginCaptures':
+      '1':
+        'name': 'punctuation.whitespace.comment.leading.jpl'
+    'end': '(?!\\G)'
+    'patterns': [
+      {
+        'begin': '//'
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.definition.comment.jpl'
+        'end': '\\n'
+        'name': 'comment.line.double-slash.jpl'
+      }
+    ]
+  }
+  {
+    'begin': '/\\*'
+    'beginCaptures':
+      '0':
+        'name': 'punctuation.definition.comment.begin.jpl'
+    'end': '\\*/'
+    'endCaptures':
+      '0':
+        'name': 'punctuation.definition.comment.end.jpl'
+    'name': 'comment.block.jpl'
+  }
+]
+'repository':
+  'escaped_char':
+    'match': '\\\\(:)?'
+    'name': 'constant.character.escape.jpl'
+  'colon_expansion_sql':
+    'patterns': [
+      {
+        'match': ':(\\+|=)[a-zA-Z0-9_]+'
+        'name': 'constant.other.symbol.jpl'
+      }
+      {
+        'begin': ':(\\+|=)\\('
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.begin.jpl'
+        'name': 'constant.other.symbol.jpl'
+        'end': '\\)'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.end.jpl'
+      }
+    ]
+  'colon_expansion':
+    'patterns': [
+      {
+        'match': ':[a-zA-Z0-9_]+'
+        'name': 'constant.other.symbol.jpl'
+      },
+      {
+        'begin': ':\\('
+        'beginCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.begin.jpl'
+        'name': 'constant.other.symbol.jpl'
+        'end': '\\)'
+        'endCaptures':
+          '0':
+            'name': 'punctuation.section.embedded.end.jpl'
+      }
+    ]
